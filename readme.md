@@ -8,10 +8,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them:
+What things you need to use the API:
 
 - Python 3 (3.11.5 was used)
-- Flask (2.3.2)
+- Flask (2.3.2 was used)
 
 ### Installing
 
