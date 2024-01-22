@@ -26,6 +26,7 @@ rush_hour_lower_time_limit = 15 # starting hour of "rush hour"
 rush_hour_upper_time_limit = 19 # ending hour of "rush hour"
 rush_hour_rate = 1.2 # delivery fee multiplier for "rush hour"
 free_delivery_cart_value = 20000 # free delivery cart value. 200€
+max_delivery_fee = 1500 # 15€
 
 def small_order_surcharge(cart_value):
     if cart_value < small_order_surcharge_limit:
@@ -97,7 +98,7 @@ def calculate_delivery_fee():
     delivery_fee = delivery_fee * rush_hour_rate if rush_hour_charge(time) else delivery_fee
     
     # If delivery fee is over 15€, set it to 15€
-    delivery_fee = min(delivery_fee, 1500)
+    delivery_fee = min(delivery_fee, max_delivery_fee)
     
     # Lastly quick check to verify if free delivery is necessary.
     if cart_value >= free_delivery_cart_value:

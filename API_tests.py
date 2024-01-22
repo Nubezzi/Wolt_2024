@@ -7,7 +7,7 @@ from API import (small_order_surcharge_limit, delivery_base_fee, devivery_base_f
                  delivery_fee_distance_increment, delivery_fee_distance_increment_charge,
                  num_items_charge_limit, bulk_items_limit, bulk_fee, rush_hour_weekday,
                  rush_hour_lower_time_limit, rush_hour_upper_time_limit, rush_hour_rate,
-                 free_delivery_cart_value)
+                 free_delivery_cart_value, max_delivery_fee)
 
 #Helper function to generate ISO strings for tests. Generated date is next friday ;)
 def generate_iso_date(weekday, hour, minutes):
@@ -176,6 +176,17 @@ class APITestCase(unittest.TestCase):
             data = response.get_json()
             self.assertEqual(response.status_code, 200) # The API should return 200, as the request is valid
             self.assertEqual(data['delivery_fee'], j) # verify the delivery fee
+            
+    def test_over_limit_delivery_fee(self):
+        response = self.app.post('/delivery_fee', json={
+            "cart_value": 1,
+            "delivery_distance": 9999,
+            "number_of_items": 20,
+            "time": self.some_non_rush_hour_iso_date
+        })
+        data = response.get_json()
+        self.assertEqual(response.status_code, 200) # The API should return 200, as the request is valid
+        self.assertEqual(data['delivery_fee'], max_delivery_fee) # The delivery fee should not be more than max limit
         
 # All tests ran
 if __name__ == '__main__':
